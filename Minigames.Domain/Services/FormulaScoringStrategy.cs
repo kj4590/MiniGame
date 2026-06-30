@@ -2,7 +2,7 @@
 
 namespace Minigames.Domain.Services;
 
-public class  FormulaScoringStrategy : IGameScoringStrategy
+public class FormulaScoringStrategy : IGameScoringStrategy
 {
     public MenuOption Game => MenuOption.Formula;
 

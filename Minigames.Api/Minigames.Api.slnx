@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../Minigames.Application/Minigames.Application.csproj" />
+  <Project Path="../Minigames.Domain/Minigames.Domain.csproj" />
+  <Project Path="../Minigames.Infrastructure/Minigames.Infrastructure.csproj" />
+  <Project Path="../Minigames.Persistence/Minigames.Persistence.csproj" />
+  <Project Path="Minigames.Api.csproj" />
+</Solution>

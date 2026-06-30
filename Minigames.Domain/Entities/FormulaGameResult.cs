@@ -1,6 +1,6 @@
 ﻿namespace Minigames.Domain.Entities;
 
-public class  FormulaGameResult
+public class FormulaGameResult
 {
     public int TimesPlayed { get; private set; }
 

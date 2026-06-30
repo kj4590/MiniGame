@@ -2,13 +2,13 @@
 
 public class PlayerGameSummary
 {
-    public HangmanGameResult hangmanGameResult { get; private set; }
+   public HangmanGameResult HangmanGameResult { get; private set; }
 
-    public FormulaGameResult formulaGameResult { get; private set; }
+   public FormulaGameResult FormulaGameResult { get; private set; }
 
     public PlayerGameSummary()
     {
-        hangmanGameResult = new HangmanGameResult();
-        formulaGameResult = new FormulaGameResult();
+        HangmanGameResult = new HangmanGameResult();
+        FormulaGameResult = new FormulaGameResult();
     }
 }
