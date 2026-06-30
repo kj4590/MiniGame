@@ -2,16 +2,20 @@
 using Minigames.Application.Interfaces;
 using Minigames.Domain.Entities;
 
-namespace Minigames.Infrastructure.Repositories
+namespace Minigames.Application.Services
 {
     public class PlayerService(IPlayerRepository playerRepository) : IPlayerService
     {
         private readonly IPlayerRepository _playerRepository = playerRepository;
 
-        public Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto createPlayerDto)
+        public async Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto createPlayerDto)
         {
             var player = new Player(createPlayerDto.PlayerName);
-            return Task.FromResult(new PlayerDto { PlayerName = player.PlayerName });
+
+            await
+                _playerRepository.AddPlayerAsync(player);
+
+            return new PlayerDto { PlayerName = player.PlayerName };
         }
 
         public async Task<PlayerDto> GetPlayerByNameAsync(string playerName)

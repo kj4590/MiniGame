@@ -1,5 +1,6 @@
 ﻿using Minigames.Application.Interfaces;
 using Minigames.Infrastructure.Repositories;
+using Minigames.Application.Services;
 
 public partial class Program
 {
@@ -7,10 +8,11 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
 
+        builder.Services.AddSwaggerGen();
 
         builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
         builder.Services.AddScoped<IPlayerService, PlayerService>();
@@ -25,7 +27,7 @@ public partial class Program
 
         app.UseHttpsRedirection();
 
-        app.MapGet("/", () => "Minigames API is running!");
+        app.MapControllers();
 
         app.Run();
     }
