@@ -21,6 +21,7 @@ public partial class Program
         builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
         builder.Services.AddScoped<IPlayerService, PlayerService>();
         builder.Services.AddScoped<IFormulaGameService, FormulaGameService>();
+        builder.Services.AddScoped<IHangmanGameService, HangmanService>();
 
 
         builder.Services.AddDbContext<MinigamesDbContext>(options =>
