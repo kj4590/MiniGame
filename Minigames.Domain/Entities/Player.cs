@@ -6,6 +6,12 @@ public class Player
     public string PlayerName { get; private set; }
     public PlayerGameSummary GameSummary { get; private set; }
 
+    private Player()
+    {
+        PlayerName = string.Empty;
+        GameSummary = new PlayerGameSummary();
+    }
+
     public Player(string playerName)
     {
         if (string.IsNullOrWhiteSpace(playerName))

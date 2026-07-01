@@ -14,5 +14,5 @@ public record PlayerGameSummaryDto(int PlayerId)
     }
 
     public FormulaGameResultDto FormulaGameResult { get => formulaGameResult; set => formulaGameResult = value; }
-    public HangmanGameResultDto HangmanGameResult1 { get => hangmanGameResult; set => hangmanGameResult = value; }
+    public HangmanGameResultDto HangmanGameResult { get => hangmanGameResult; set => hangmanGameResult = value; }
 }
