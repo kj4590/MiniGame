@@ -7,5 +7,7 @@ namespace Minigames.Application.Interfaces
         Task<Player?> GetPlayerByNameAsync(string playerName);
         Task<IEnumerable<Player>> GetAllPlayersAsync();
         Task AddPlayerAsync(Player player);
+
+        Task SaveChangesAsync();
     }
 }
