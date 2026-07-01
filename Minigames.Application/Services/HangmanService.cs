@@ -1,18 +1,27 @@
 ﻿using Minigames.Application.DTOs;
 using Minigames.Application.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Minigames.Application.Services;
 
 public class HangmanService : IHangmanGameService
 {
+
     private const int MaxAttempts = 15;
 
     private readonly List<char> _guessedLetters = new();
 
     private int _remainingAttempts = MaxAttempts;
 
-
     private readonly string _word;
+
+
+    private readonly IWebHostEnvironment _environment;
+
+    public HangmanService(IWebHostEnvironment environment)
+    {
+        _environment = environment;
+    }
 
     public HangmanService()
     {
@@ -22,24 +31,19 @@ public class HangmanService : IHangmanGameService
     private string GetRandomWord()
     {
         var filePath = Path.Combine(
-            AppContext.BaseDirectory,
+            _environment.ContentRootPath,
+            "Persistence",
             "words.txt");
 
         var words = File.ReadAllLines(filePath)
                         .Where(w => !string.IsNullOrWhiteSpace(w))
                         .ToList();
 
-        if (!words.Any())
-        {
-            throw new InvalidOperationException(
-                "The words file is empty.");
-        }
-
         var random = new Random();
 
         return words[random.Next(words.Count)]
-            .Trim()
-            .ToUpper();
+               .Trim()
+               .ToUpper();
     }
 
 
