@@ -14,5 +14,12 @@
     <ProjectReference Include="..\Minigames.Application\Minigames.Application.csproj" />
     <ProjectReference Include="..\Minigames.Domain\Minigames.Domain.csproj" />
   </ItemGroup>
+	
+		<ItemGroup>
+		<None Update="Data\words.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
 
 </Project>

@@ -6,7 +6,6 @@ namespace Minigames.Application.Services;
 
 public class HangmanService : IHangmanGameService
 {
-
     private const int MaxAttempts = 15;
 
     private readonly List<char> _guessedLetters = new();
@@ -15,38 +14,10 @@ public class HangmanService : IHangmanGameService
 
     private readonly string _word;
 
-
-    private readonly IWebHostEnvironment _environment;
-
-    public HangmanService(IWebHostEnvironment environment)
+    public HangmanService(IWordProvider wordProvider)
     {
-        _environment = environment;
+        _wordProvider = wordProvider;
     }
-
-    public HangmanService()
-    {
-        _word = GetRandomWord();
-    }
-
-    private string GetRandomWord()
-    {
-        var filePath = Path.Combine(
-            _environment.ContentRootPath,
-            "Persistence",
-            "words.txt");
-
-        var words = File.ReadAllLines(filePath)
-                        .Where(w => !string.IsNullOrWhiteSpace(w))
-                        .ToList();
-
-        var random = new Random();
-
-        return words[random.Next(words.Count)]
-               .Trim()
-               .ToUpper();
-    }
-
-
     public StartHangmanGameDto StartGame(string playerName)
     {
         _guessedLetters.Clear();
@@ -61,7 +32,7 @@ public class HangmanService : IHangmanGameService
 
         _guessedLetters.Add(letter);
 
-        if (!_word.Contains(letter))
+        if (!_wordProvider.Contains(letter))
         {
             _remainingAttempts--;
         }

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Minigames.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 using Minigames.Application.Interfaces;
 using Minigames.Application.Services;
-using Minigames.Persistence.Data;
 using Minigames.Persistence.Repositories;
+using Minigames.Persistence.Services;
 
 public partial class Program
 {
@@ -17,6 +18,7 @@ public partial class Program
         builder.Services.AddSwaggerGen();
 
 
+        builder.Services.AddSingleton<IWordProvider, TextFileWordProvider>();
         builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
         builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
         builder.Services.AddScoped<IPlayerService, PlayerService>();

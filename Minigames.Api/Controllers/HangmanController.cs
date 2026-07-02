@@ -1,12 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Minigames.Application.Interfaces;
+using Minigames.Application.DTOs;
 
-namespace Minigames.Api.Controllers
+namespace Minigames.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class HangmanController : ControllerBase
 {
-    public class HangmanController : Controller
+    private readonly IHangmanGameService _hangmanGameService;
+
+    public HangmanController(IHangmanGameService hangmanGameService)
     {
-        public IActionResult Index()
+        _hangmanGameService = hangmanGameService;
+    }
+
+    [HttpPost("start")]
+    public IActionResult StartGame()
+    {
+        var result = _hangmanGameService.StartGame();
+        return Ok(result);
+    }
+
+    [HttpPost("guess")]
+    public IActionResult GuessLetter([FromBody] HangmanGuessDto guessDto)
+    {
+        if (guessDto == null || string.IsNullOrWhiteSpace(guessDto.Letter))
         {
-            return View();
+            return BadRequest("Letter is required.");
         }
+
+        var result = _hangmanGameService.GuessLetter(guessDto.Letter);
+        return Ok(result);
     }
 }
