@@ -1,8 +1,7 @@
-namespace Minigames.Application.DTOs
+namespace Minigames.Application.DTOs;
+
+public class PlayerDto
 {
-    public class PlayerDto
-    {
-        public int Id { get; set; }
-        public string PlayerName { get; set; } = string.Empty;
-    }
+    public int Id { get; set; }
+    public string PlayerName { get; set; } = string.Empty;
 }

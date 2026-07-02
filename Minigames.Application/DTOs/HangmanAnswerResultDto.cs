@@ -5,5 +5,6 @@ public record HangmanAnswerResultDto(
     int RemainingAttempts,
     List<char> GuessedLetters,
     string Message,
-    bool IsWon
+    bool IsWon,
+    bool IsGameOver
 );

@@ -1,0 +1,46 @@
+<div class="container mt-5">
+
+  <div class="card shadow p-4">
+
+    <h1 class="text-center mb-3">
+      Mini Games
+    </h1>
+
+    <h5 class="text-center mb-4">
+      Welcome {{ playerName }}
+    </h5>
+
+    <div class="d-grid gap-3">
+
+      <button class="btn btn-primary btn-lg"
+              (click)="goToFormula()">
+        Formula Game
+      </button>
+
+      <button class="btn btn-success btn-lg"
+              (click)="goToHangman()">
+        Hangman
+      </button>
+
+      <button class="btn btn-dark btn-lg"
+              (click)="goToLeaderboard()">
+        Leaderboard
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="goHome()">
+        Back to Home
+      </button>
+
+
+      <button class="btn btn-danger"
+              (click)="signOut()">
+        Sign Out
+      </button>
+
+
+    </div>
+
+  </div>
+
+</div>

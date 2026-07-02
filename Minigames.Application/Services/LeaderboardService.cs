@@ -1,10 +1,10 @@
 ﻿using Minigames.Application.DTOs;
 using Minigames.Application.Interfaces;
 
-namespace Minigames.Application.Services
+namespace Minigames.Application.Services;
+
+public class LeaderboardService : ILeaderboardService
 {
-    public class LeaderboardService : ILeaderboardService
-    {
         private readonly IPlayerRepository _playerRepository;
 
         public LeaderboardService(IPlayerRepository playerRepository)
@@ -56,4 +56,3 @@ namespace Minigames.Application.Services
                 .ToList();
         }
     }
-}

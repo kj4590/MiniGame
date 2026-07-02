@@ -17,13 +17,23 @@ public partial class Program
 
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
+
 
         builder.Services.AddSingleton<IWordProvider, TextFileWordProvider>();
+        builder.Services.AddSingleton<IHangmanGameService, HangmanService>();
         builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
         builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
         builder.Services.AddScoped<IPlayerService, PlayerService>();
         builder.Services.AddScoped<IFormulaGameService, FormulaGameService>();
-        builder.Services.AddScoped<IHangmanGameService, HangmanService>();
 
 
         builder.Services.AddDbContext<MinigamesDbContext>(options =>
@@ -39,6 +49,8 @@ public partial class Program
         }
 
         app.UseHttpsRedirection();
+
+        app.UseCors("AllowAll");
 
         app.MapControllers();
 

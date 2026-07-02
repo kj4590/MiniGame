@@ -2,54 +2,82 @@
 using Minigames.Application.Interfaces;
 using Minigames.Domain.Entities;
 
-namespace Minigames.Application.Services
+namespace Minigames.Application.Services;
+
+public class PlayerService(IPlayerRepository playerRepository) : IPlayerService
 {
-    public class PlayerService(IPlayerRepository playerRepository) : IPlayerService
+    private readonly IPlayerRepository _playerRepository = playerRepository;
+
+    public async Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto createPlayerDto)
     {
-        private readonly IPlayerRepository _playerRepository = playerRepository;
+        var player = new Player(createPlayerDto.PlayerName);
+        await _playerRepository.AddPlayerAsync(player);
+        return new PlayerDto { PlayerName = player.PlayerName };
+    }
 
-        public async Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto createPlayerDto)
+    public async Task<PlayerDto> GetPlayerByNameAsync(string playerName)
+    {
+        if (string.IsNullOrWhiteSpace(playerName))
+            throw new ArgumentException("Player name must not be empty.", nameof(playerName));
+
+        var player = await _playerRepository.GetPlayerByNameAsync(playerName);
+        if (player == null)
+            throw new KeyNotFoundException($"Player '{playerName}' not found.");
+
+        return new PlayerDto
         {
-            var player = new Player(createPlayerDto.PlayerName);
+            Id = player.Id,
+            PlayerName = player.PlayerName
+        };
+    }
 
-            await
-                _playerRepository.AddPlayerAsync(player);
+    public async Task<PlayerGameSummaryDto?> GetPlayerGameSummaryAsync(string playerName)
+    {
+        if (string.IsNullOrWhiteSpace(playerName))
+            throw new ArgumentException("Player name must not be empty.", nameof(playerName));
 
-            return new PlayerDto { PlayerName = player.PlayerName };
-        }
+        var player = await _playerRepository.GetPlayerByNameAsync(playerName);
+        if (player == null)
+            return null;
 
-        public async Task<PlayerDto> GetPlayerByNameAsync(string playerName)
+        var summary = new PlayerGameSummaryDto(player.Id)
         {
-            if (string.IsNullOrWhiteSpace(playerName))
-                throw new ArgumentException("Player name must not be empty.", nameof(playerName));
+            PlayerName = player.PlayerName,
+            HangmanGameResult = player.GameSummary?.HangmanGameResult,
+            FormulaGameResult = player.GameSummary?.FormulaGameResult
+        };
+        return summary;
+    }
 
-            var player = await _playerRepository.GetPlayerByNameAsync(playerName);
-            if (player == null)
-                throw new KeyNotFoundException($"Player '{playerName}' not found.");
+    public async Task RecordHangmanGameAsync(string playerName, bool won)
+    {
+        if (string.IsNullOrWhiteSpace(playerName))
+            throw new ArgumentException("Player name must not be empty.", nameof(playerName));
 
-            return new PlayerDto
-            {
-                Id = player.Id,
-                PlayerName = player.PlayerName
-            };
-        }
+        var player = await _playerRepository.GetPlayerByNameAsync(playerName);
+        if (player == null)
+            throw new KeyNotFoundException($"Player '{playerName}' not found.");
 
-        public async Task<PlayerGameSummaryDto?> GetPlayerGameSummaryAsync(string playerName)
-        {
-            if (string.IsNullOrWhiteSpace(playerName))
-                throw new ArgumentException("Player name must not be empty.", nameof(playerName));
+        // Record the game result
+        player.GameSummary.HangmanGameResult.RecordGame(won);
 
-            var player = await _playerRepository.GetPlayerByNameAsync(playerName);
-            if (player == null)
-                return null;
+        // Save changes to database
+        await _playerRepository.SaveChangesAsync();
+    }
 
-            var summary = new PlayerGameSummaryDto(player.Id)
-            {
-                PlayerName = player.PlayerName,
-                HangmanGameResult = player.GameSummary?.HangmanGameResult,
-                FormulaGameResult = player.GameSummary?.FormulaGameResult
-            };
-            return summary;
-        }
+    public async Task RecordFormulaGameAsync(string playerName, int difference)
+    {
+        if (string.IsNullOrWhiteSpace(playerName))
+            throw new ArgumentException("Player name must not be empty.", nameof(playerName));
+
+        var player = await _playerRepository.GetPlayerByNameAsync(playerName);
+        if (player == null)
+            throw new KeyNotFoundException($"Player '{playerName}' not found.");
+
+        // Record the game result
+        player.GameSummary.FormulaGameResult.RecordGame(difference);
+
+        // Save changes to database
+        await _playerRepository.SaveChangesAsync();
     }
 }

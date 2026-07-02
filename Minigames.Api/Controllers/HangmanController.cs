@@ -9,28 +9,45 @@ namespace Minigames.Api.Controllers;
 public class HangmanController : ControllerBase
 {
     private readonly IHangmanGameService _hangmanGameService;
+    private readonly IPlayerService _playerService;
 
-    public HangmanController(IHangmanGameService hangmanGameService)
+    public HangmanController(IHangmanGameService hangmanGameService, IPlayerService playerService)
     {
         _hangmanGameService = hangmanGameService;
+        _playerService = playerService;
     }
 
-    [HttpPost("start")]
-    public IActionResult StartGame()
+    [HttpPost("start/{playerName}")]
+    public IActionResult StartGame(string playerName)
     {
-        var result = _hangmanGameService.StartGame();
+        var result = _hangmanGameService.StartGame(playerName);
         return Ok(result);
     }
 
     [HttpPost("guess")]
-    public IActionResult GuessLetter([FromBody] HangmanGuessDto guessDto)
+    public async Task<IActionResult> GuessLetter([FromBody] SubmitGuessDto guessDto)
     {
-        if (guessDto == null || string.IsNullOrWhiteSpace(guessDto.Letter))
+        if (guessDto == null || guessDto.Letter == null)
         {
             return BadRequest("Letter is required.");
         }
 
-        var result = _hangmanGameService.GuessLetter(guessDto.Letter);
+        var result = await _hangmanGameService.SubmitGuessAsync(guessDto);
+
+        // If game is over, save the result to database
+        if (result.IsGameOver)
+        {
+            try
+            {
+                await _playerService.RecordHangmanGameAsync(guessDto.PlayerName, result.IsWon);
+            }
+            catch (Exception ex)
+            {
+                // Log error but still return game result
+                System.Diagnostics.Debug.WriteLine($"Error recording hangman game: {ex.Message}");
+            }
+        }
+
         return Ok(result);
     }
 }

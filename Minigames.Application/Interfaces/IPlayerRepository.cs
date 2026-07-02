@@ -1,13 +1,11 @@
 using Minigames.Domain.Entities;
 
-namespace Minigames.Application.Interfaces
-{
-    public interface IPlayerRepository
-    {
-        Task<Player?> GetPlayerByNameAsync(string playerName);
-        Task<IEnumerable<Player>> GetAllPlayersAsync();
-        Task AddPlayerAsync(Player player);
+namespace Minigames.Application.Interfaces;
 
-        Task SaveChangesAsync();
-    }
+public interface IPlayerRepository
+{
+    Task<Player?> GetPlayerByNameAsync(string playerName);
+    Task<IEnumerable<Player>> GetAllPlayersAsync();
+    Task AddPlayerAsync(Player player);
+    Task SaveChangesAsync();
 }

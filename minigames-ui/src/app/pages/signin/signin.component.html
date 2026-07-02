@@ -1,0 +1,38 @@
+<div class="container mt-5">
+
+  <div class="card shadow p-4">
+
+    <h2 class="text-center mb-4">
+      Sign In
+    </h2>
+
+    <div class="mb-3">
+
+      <label class="form-label">
+        Player Name
+      </label>
+
+      <input type="text"
+             class="form-control"
+             placeholder="Enter player name"
+             [(ngModel)]="playerName">
+
+    </div>
+
+    <div class="d-grid gap-2">
+
+      <button class="btn btn-primary"
+              (click)="signIn()">
+        Sign In
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="goHome()">
+        Back to Home
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

@@ -3,10 +3,10 @@ using Minigames.Application.Interfaces;
 using Minigames.Domain.Entities;
 using Minigames.Persistence.Data;
 
-namespace Minigames.Persistence.Repositories
+namespace Minigames.Persistence.Repositories;
+
+public class PlayerRepository : IPlayerRepository
 {
-    public class PlayerRepository : IPlayerRepository
-    {
         private readonly MinigamesDbContext _context;
 
         public PlayerRepository(MinigamesDbContext context)
@@ -16,8 +16,13 @@ namespace Minigames.Persistence.Repositories
 
         public async Task<Player?> GetPlayerByNameAsync(string playerName)
         {
-            return await _context.Players.FirstOrDefaultAsync(p => p.PlayerName == playerName);
-        }
+        return await _context.Players
+            .Include(p => p.GameSummary)
+                .ThenInclude(gs => gs.FormulaGameResult)
+            .Include(p => p.GameSummary)
+                .ThenInclude(gs => gs.HangmanGameResult)
+            .FirstOrDefaultAsync(p => p.PlayerName == playerName);
+                }
 
         public async Task<IEnumerable<Player>> GetAllPlayersAsync()
         {
@@ -30,9 +35,8 @@ namespace Minigames.Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
+            public async Task SaveChangesAsync()
+            {
+                await _context.SaveChangesAsync();
+            }
         }
-    }
-}

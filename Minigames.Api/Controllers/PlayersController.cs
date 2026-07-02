@@ -2,92 +2,91 @@
 using Minigames.Application.DTOs;
 using Minigames.Application.Interfaces;
 
-namespace Minigames.Api.Controllers
+namespace Minigames.Api.Controllers;
+
+/// <summary>
+/// API controller for managing players and their game statistics.
+/// </summary>
+[Route("api/[controller]")]
+[ApiController]
+[Produces("application/json")]
+public class PlayersController : ControllerBase
 {
+    private readonly IPlayerService _playerService;
+
     /// <summary>
-    /// API controller for managing players and their game statistics.
+    /// Initializes a new instance of the PlayersController.
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiController]
-    [Produces("application/json")]
-    public class PlayersController : ControllerBase
+    public PlayersController(IPlayerService playerService)
     {
-        private readonly IPlayerService _playerService;
+        _playerService = playerService;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the PlayersController.
-        /// </summary>
-        public PlayersController(IPlayerService playerService)
+    /// <summary>
+    /// Creates a new player.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PlayerDto>> CreatePlayer([FromBody] CreatePlayerDto createPlayerDto)
+    {
+        if (!ModelState.IsValid)
         {
-            _playerService = playerService;
+            return BadRequest(ModelState);
         }
 
-        /// <summary>
-        /// Creates a new player.
-        /// </summary>
-        [HttpPost]
-        [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PlayerDto>> CreatePlayer([FromBody] CreatePlayerDto createPlayerDto)
+        try
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var playerDto = await _playerService.CreatePlayerAsync(createPlayerDto);
-                return CreatedAtAction(nameof(GetPlayerByName), new { playerName = playerDto.PlayerName }, playerDto);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var playerDto = await _playerService.CreatePlayerAsync(createPlayerDto);
+            return CreatedAtAction(nameof(GetPlayerByName), new { playerName = playerDto.PlayerName }, playerDto);
         }
-
-        /// <summary>
-        /// Retrieves a player by name.
-        /// </summary>
-        [HttpGet("{playerName}")]
-        [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PlayerDto>> GetPlayerByName(string playerName)
+        catch (ArgumentException ex)
         {
-            try
-            {
-                var playerDto = await _playerService.GetPlayerByNameAsync(playerName);
-                return Ok(playerDto);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"Player '{playerName}' not found.");
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        /// <summary>
-        /// Retrieves the game summary for a player.
-        /// </summary>
-        [HttpGet("{playerName}/game-summary")]
-        [ProducesResponseType(typeof(PlayerGameSummaryDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PlayerGameSummaryDto>> GetPlayerGameSummary(string playerName)
+    /// <summary>
+    /// Retrieves a player by name.
+    /// </summary>
+    [HttpGet("{playerName}")]
+    [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<PlayerDto>> GetPlayerByName(string playerName)
+    {
+        try
         {
-            try
-            {
-                var gameSummary = await _playerService.GetPlayerGameSummaryAsync(playerName);
+            var playerDto = await _playerService.GetPlayerByNameAsync(playerName);
+            return Ok(playerDto);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"Player '{playerName}' not found.");
+        }
+    }
 
-                if (gameSummary == null)
-                {
-                    return NotFound($"Game summary for player '{playerName}' not found.");
-                }
+    /// <summary>
+    /// Retrieves the game summary for a player.
+    /// </summary>
+    [HttpGet("{playerName}/game-summary")]
+    [ProducesResponseType(typeof(PlayerGameSummaryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<PlayerGameSummaryDto>> GetPlayerGameSummary(string playerName)
+    {
+        try
+        {
+            var gameSummary = await _playerService.GetPlayerGameSummaryAsync(playerName);
 
-                return Ok(gameSummary);
-            }
-            catch (KeyNotFoundException)
+            if (gameSummary == null)
             {
-                return NotFound($"Player '{playerName}' not found.");
+                return NotFound($"Game summary for player '{playerName}' not found.");
             }
+
+            return Ok(gameSummary);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"Player '{playerName}' not found.");
         }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using Minigames.Application.DTOs;
 
-namespace Minigames.Application.Interfaces
+namespace Minigames.Application.Interfaces;
+
+public interface ILeaderboardService
 {
-    public interface ILeaderboardService
-    {
-        Task<IEnumerable<LeaderboardDto>> GetLeaderboardAsync();
-
-        Task<List<LeaderboardDto>> GetHangmanLeaderboardAsync();
-
-        Task<List<LeaderboardDto>> GetFormulaLeaderboardAsync();
-    }
+    Task<IEnumerable<LeaderboardDto>> GetLeaderboardAsync();
+    Task<List<LeaderboardDto>> GetHangmanLeaderboardAsync();
+    Task<List<LeaderboardDto>> GetFormulaLeaderboardAsync();
 }

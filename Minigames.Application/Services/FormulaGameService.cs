@@ -1,11 +1,12 @@
 ﻿using System.Data;
 using System.Text.RegularExpressions;
+using Minigames.Application.DTOs;
 using Minigames.Application.Interfaces;
 
-namespace Minigames.Application.Services
+namespace Minigames.Application.Services;
+
+public class FormulaGameService : IFormulaGameService
 {
-    public class FormulaGameService : IFormulaGameService
-    {
         private readonly IPlayerRepository _playerRepository;
         private readonly List<int> _numbersInFormula = new List<int> { 2, 5, 8, 10, 25, 50 };
         private const int Target = 532;
@@ -70,12 +71,22 @@ namespace Minigames.Application.Services
                 _ => "Nice try!"
             };
 
-            return new FormulaAnswerResultDto(
+        var player = await _playerRepository.GetPlayerByNameAsync(_answer.PlayerName);
+
+        if (player == null)
+        {
+            throw new ArgumentException(
+                $"Player '{_answer.PlayerName}' not found.");
+        }
+
+        player.GameSummary.FormulaGameResult.RecordGame(difference);
+
+        await _playerRepository.SaveChangesAsync();
+
+        return new FormulaAnswerResultDto(
                 result,
                 difference,
                 message
             );
         }
-
     }
-}

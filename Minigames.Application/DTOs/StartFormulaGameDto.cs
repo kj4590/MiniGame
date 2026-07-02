@@ -7,11 +7,6 @@
         int Target
         );
 
-    public record SubmitFormulaAnswerDto(
-        string PlayerName,
-        string Expression
-        );
-
     public record FormulaAnswerResultDto(
         int Result,
         int Difference,
