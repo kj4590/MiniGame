@@ -29,16 +29,6 @@ public class FormulaController : ControllerBase
     {
         var result = await _formulaGameService.SubmitFormulaAnswerAsync(_answer);
 
-        // Record formula game result
-        try
-        {
-            await _playerService.RecordFormulaGameAsync(_answer.PlayerName, result.Difference);
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Error recording formula game: {ex.Message}");
-        }
-
         return Ok(result);
     }
 }

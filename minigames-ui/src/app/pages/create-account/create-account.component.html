@@ -1,1 +1,57 @@
-<p>create-account works!</p>
+<div class="container mt-5">
+
+  <div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+      <div class="card shadow">
+
+        <div class="card-body">
+
+          <h2 class="text-center mb-4">
+            Create Account
+          </h2>
+
+          <div class="mb-3">
+
+            <label class="form-label">
+              Player Name
+            </label>
+
+            <input type="text"
+                   class="form-control"
+                   placeholder="Enter a player name"
+                   [(ngModel)]="playerName">
+
+          </div>
+
+          <div class="d-grid gap-2">
+
+            <button class="btn btn-success"
+                    (click)="createAccount()">
+              Create Account
+            </button>
+
+            <button class="btn btn-outline-secondary"
+                    (click)="goHome()">
+              Back to Home
+            </button>
+
+          </div>
+
+          <div *ngIf="errorMessage"
+               class="alert alert-danger mt-3">
+
+            {{ errorMessage }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

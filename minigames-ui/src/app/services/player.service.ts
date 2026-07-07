@@ -12,8 +12,8 @@ export class PlayerService {
 
   constructor(private http: HttpClient) { }
 
-  createPlayer(player: CreatePlayer): Observable<any> {
-    return this.http.post(this.apiUrl, player);
+  createPlayer(playerName: string): Observable<any> {
+    return this.http.post(this.apiUrl, {playerName});
   }
 
   getPlayer(playerName: string) {

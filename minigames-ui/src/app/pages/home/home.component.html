@@ -6,10 +6,6 @@
       Mini Games
     </h1>
 
-    <h3 class="mb-3">
-      Leaderboard
-    </h3>
-
     <h3 class="mb-3">Leaderboard</h3>
 
     <table class="table table-striped">
@@ -24,7 +20,7 @@
 
       <tbody>
 
-        <tr *ngFor="let player of leaderboard; *et i = index">
+        <tr *ngFor="let player of leaderboard; let i = index">
 
           <td>{{ i + 1}}</td>
           <td>{{ player.name }}</td>
@@ -36,19 +32,36 @@
 
       </table>
 
-      <div class="d-grid gap-2 mt-*">
+    <div class="d-grid gap-2 mt-3">
+
+      <div *ngIf="!isSignedIn">
 
         <button class="btn btn-primary"
                 (click)="signIn()">
           Sign In
-          </button>
+        </button>
 
-          <button class="btn btn-success"
-                  (click)="CreateAccount()">
-            Create Account
-          </button>
+        <button class="btn btn-success"
+                (click)="createAccount()">
+          Create Account
+        </button>
 
       </div>
+
+      <div *ngIf="isSignedIn">
+
+        <p>
+          Welcome {{ playerName }}
+        </p>
+
+        <button class="btn btn-primary"
+                (click)="goToMenu()">
+          Continue Playing
+        </button>
+
+      </div>
+
+    </div>
   </div>
 
 </div>

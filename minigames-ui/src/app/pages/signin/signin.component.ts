@@ -14,6 +14,8 @@ import { PlayerService } from '../../services/player.service';
 export class SigninComponent {
 
   playerName = '';
+  errorMessage = '';
+  loading = false;
 
   constructor(
     private playerService: PlayerService,
@@ -22,46 +24,43 @@ export class SigninComponent {
 
   signIn(): void {
 
-    if (!this.playerName.trim()) {
+    this.errorMessage = '';
+
+    const trimmedPlayerName = this.playerName.trim();
+
+    if (!trimmedPlayerName) {
+      this.errorMessage = 'Please enter a player name.';
       return;
     }
 
+    this.loading = true;
+
     this.playerService
-      .getPlayer(this.playerName)
+      .getPlayer(trimmedPlayerName)
       .subscribe({
-        next: (player) => {
+        next: () => {
 
           localStorage.setItem(
             'playerName',
-            this.playerName
+            trimmedPlayerName
           );
 
+          this.loading = false;
           this.router.navigate(['/menu']);
         },
 
         error: () => {
 
-          this.playerService
-            .createPlayer({
-              playerName: this.playerName
-            })
-            .subscribe({
-              next: () => {
+          this.loading = false;
 
-                localStorage.setItem(
-                  'playerName',
-                  this.playerName
-                );
-
-                this.router.navigate(['/menu']);
-              },
-
-              error: () => {
-                alert('Unable to create player.');
-              }
-            });
+          this.errorMessage =
+            'Player not found. Please create an account.';
         }
       });
+  }
+
+  goToCreateAccount(): void {
+    this.router.navigate(['/create-account']);
   }
 
   goHome(): void {

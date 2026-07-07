@@ -1,1 +1,77 @@
-<p>formula works!</p>
+<div class="container mt-5">
+
+  <div class="card shadow p-4">
+
+    <h2 class="mb-4">
+      Formula Game
+    </h2>
+
+    <div *ngIf="game">
+
+      <h4>
+        Target: {{ game.target }}
+      </h4>
+
+      <div class="mb-4">
+
+        <span *ngFor="let number of game.numbers"
+              class="badge bg-primary me-2">
+
+          {{ number }}
+
+        </span>
+
+      </div>
+
+      <div class="mb-3">
+
+        <label class="form-label">
+
+          Enter Expression
+
+        </label>
+
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="expression">
+
+      </div>
+
+      <button class="btn btn-success me-2"
+              (click)="submit()">
+
+        Submit
+
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="goMenu()">
+
+        Back
+
+      </button>
+
+    </div>
+
+    <div *ngIf="result"
+         class="alert alert-info mt-4">
+
+      <p>
+        Result:
+        {{ result.result }}
+      </p>
+
+      <p>
+        Difference:
+        {{ result.difference }}
+      </p>
+
+      <p>
+        {{ result.message }}
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

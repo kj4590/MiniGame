@@ -1,1 +1,93 @@
-<p>hangman works!</p>
+<div class="container mt-5">
+
+  <div class="card shadow p-4">
+
+    <h2>Hangman</h2>
+
+    <div *ngIf="!result && game">
+
+      <h3 class="mt-4">
+        {{ game.currentWord }}
+      </h3>
+
+      <p>
+        Remaining Attempts:
+        {{ game.remainingAttempts }}
+      </p>
+
+      <p>
+        Guessed Letters:
+        {{ game.guessedLetters.join(', ') }}
+      </p>
+
+    </div>
+
+    <div *ngIf="result">
+
+      <h3>
+        {{ result.currentWord }}
+      </h3>
+
+      <p>
+        Remaining Attempts:
+        {{ result.remainingAttempts }}
+      </p>
+
+      <p>
+        Guessed Letters:
+        {{ result.guessedLetters.join(', ') }}
+      </p>
+
+      <div class="alert alert-info">
+
+        {{ result.message }}
+
+      </div>
+
+      <div *ngIf="result.isWon"
+           class="alert alert-success">
+
+        You Won!
+
+      </div>
+
+      <div *ngIf="result.isGameOver && !result.isWon"
+           class="alert alert-danger">
+
+        Game Over
+
+      </div>
+
+    </div>
+
+    <div class="mt-3">
+
+      <input type="text"
+             maxlength="1"
+             class="form-control"
+             [(ngModel)]="letter"
+             placeholder="Enter letter">
+
+    </div>
+
+    <div class="mt-3">
+
+      <button class="btn btn-success me-2"
+              (click)="submitGuess()">
+
+        Guess
+
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="goBack()">
+
+        Back
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

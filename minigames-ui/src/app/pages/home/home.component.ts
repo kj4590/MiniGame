@@ -13,6 +13,9 @@ import { LeaderboardService } from '../../services/leaderboard.service';
 })
 export class HomeComponent implements OnInit {
 
+
+  isSignedIn = false;
+  playerName = '';
   leaderboard: any[] = [];
 
   constructor(private router: Router, private leaderboardService: LeaderboardService) { }
@@ -27,11 +30,10 @@ export class HomeComponent implements OnInit {
         }
       });
 
-    const playerName = localStorage.getItem('playerName');
+    this.playerName =
+      localStorage.getItem('playerName') ?? '';
 
-    if (playerName) {
-      this.router.navigate(['/menu']);
-    }
+    this.isSignedIn = !!this.playerName;
   }
 
   signIn(): void {
@@ -40,5 +42,9 @@ export class HomeComponent implements OnInit {
 
   createAccount(): void {
     this.router.navigate(['/create-account']);
+  }
+
+  goToMenu(): void {
+    this.router.navigate(['/menu']);
   }
 }
