@@ -1,9 +1,6 @@
-﻿using Minigames.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
-using Minigames.Application.Interfaces;
-using Minigames.Application.Services;
-using Minigames.Persistence.Repositories;
-using Minigames.Persistence.Services;
+﻿using Minigames.Application;
+using Minigames.Infrastructure;
+using Minigames.Persistence;
 
 public partial class Program
 {
@@ -27,18 +24,9 @@ public partial class Program
             });
         });
 
-
-        builder.Services.AddSingleton<IWordProvider, TextFileWordProvider>();
-        builder.Services.AddSingleton<IHangmanGameService, HangmanService>();
-        builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
-        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
-        builder.Services.AddScoped<IPlayerService, PlayerService>();
-        builder.Services.AddScoped<IFormulaGameService, FormulaGameService>();
-
-
-        builder.Services.AddDbContext<MinigamesDbContext>(options =>
-            options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddApplication();
+        builder.Services.AddInfrastructure();
+        builder.Services.AddPersistence(builder.Configuration);
 
         var app = builder.Build();
 
