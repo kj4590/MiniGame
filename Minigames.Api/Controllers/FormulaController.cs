@@ -18,20 +18,9 @@ public class FormulaController (IFormulaGameService _formulaGameService, IPlayer
     [HttpPost("submit")]
     public async Task<ActionResult<FormulaAnswerResultDto>> Submit(SubmitFormulaAnswerDto _answer)
     {
-        try
-        {
+
             var result = await _formulaGameService.SubmitFormulaAnswerAsync(_answer);
 
             return Ok(result);
-        }
-
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new
-            {
-                Message = ex.Message
-            });
-        }
     }
-
 }

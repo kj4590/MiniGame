@@ -37,15 +37,7 @@ public class HangmanController : ControllerBase
         // If game is over, save the result to database
         if (result.IsGameOver)
         {
-            try
-            {
                 await _playerService.RecordHangmanGameAsync(guessDto.PlayerName, result.IsWon);
-            }
-            catch (Exception ex)
-            {
-                // Log error but still return game result
-                System.Diagnostics.Debug.WriteLine($"Error recording hangman game: {ex.Message}");
-            }
         }
 
         return Ok(result);

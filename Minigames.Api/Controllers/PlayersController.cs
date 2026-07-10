@@ -35,14 +35,9 @@ public class PlayersController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        try
         {
             var playerDto = await _playerService.CreatePlayerAsync(createPlayerDto);
             return CreatedAtAction(nameof(GetPlayerByName), new { playerName = playerDto.PlayerName }, playerDto);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
         }
     }
 
@@ -54,15 +49,8 @@ public class PlayersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PlayerDto>> GetPlayerByName(string playerName)
     {
-        try
-        {
             var playerDto = await _playerService.GetPlayerByNameAsync(playerName);
             return Ok(playerDto);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"Player '{playerName}' not found.");
-        }
     }
 
     /// <summary>
@@ -73,8 +61,6 @@ public class PlayersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PlayerGameSummaryDto>> GetPlayerGameSummary(string playerName)
     {
-        try
-        {
             var gameSummary = await _playerService.GetPlayerGameSummaryAsync(playerName);
 
             if (gameSummary == null)
@@ -84,9 +70,4 @@ public class PlayersController : ControllerBase
 
             return Ok(gameSummary);
         }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"Player '{playerName}' not found.");
-        }
-    }
 }
